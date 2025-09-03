@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsu.taichi.mapper.ImagesMapper">
+
+    <resultMap id="BaseResultMap" type="com.bsu.taichi.content.entity.dbo.Images">
+            <id property="imageId" column="image_id" />
+            <result property="modelId" column="model_id" />
+            <result property="imageName" column="image_name" />
+            <result property="imageType" column="image_type" />
+            <result property="imageObjectKey" column="image_object_key" />
+            <result property="imageSize" column="image_size" />
+            <result property="uploadTime" column="upload_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        image_id,model_id,image_name,image_type,image_object_key,image_size,
+        upload_time
+    </sql>
+</mapper>
