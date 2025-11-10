@@ -15,12 +15,12 @@ spring:
     show-sql: true
   servlet:
     multipart:
-    max-file-size: 100MB
-    max-request-size: 100MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 # minIO配置
 minio:
-  endpoint: http://127.0.0.1:9000     # MinIO服务地址
+  endpoint: http://127.0.0.1:9005     # MinIO服务地址
   fileHost: http://127.0.0.1:9000     # 文件地址host
   bucketName: taichibucket            # 存储桶bucket名称
   accessKey: admin                    # 用户名

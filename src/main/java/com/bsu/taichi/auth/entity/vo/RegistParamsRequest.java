@@ -1,13 +1,7 @@
 package com.bsu.taichi.auth.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 /**
  * @author khran
@@ -16,7 +10,7 @@ import javax.validation.constraints.Size;
  */
 
 @Data
-public class RegistParamsVo {
+public class RegistParamsRequest {
 
     @ApiParam("用户名")
     private String username;

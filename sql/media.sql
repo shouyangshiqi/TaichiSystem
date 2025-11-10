@@ -36,3 +36,4 @@ CREATE TABLE images (
                         INDEX idx_image_object_key (image_object_key),
                         FOREIGN KEY (model_id) REFERENCES models(model_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='图片信息表';
+

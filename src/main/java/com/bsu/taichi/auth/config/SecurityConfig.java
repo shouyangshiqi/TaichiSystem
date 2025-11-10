@@ -45,19 +45,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 // 允许通过( 不经过验证 ）
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .successForwardUrl("/auth/login-success")
-                /*.and()
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
                     // 这里替换为你的前端登录页面URL
-                    String loginPageUrl = "http://localhost:8080/login.html";
+                    String loginPageUrl = "http://localhost:8080/login";
                     // 重定向到前端登录页
                     response.sendRedirect(loginPageUrl);
-                })*/;
+                });
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
