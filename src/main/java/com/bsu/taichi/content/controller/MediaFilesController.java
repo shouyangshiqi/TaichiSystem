@@ -2,9 +2,11 @@ package com.bsu.taichi.content.controller;
 
 import com.bsu.taichi.base.model.RestResponse;
 import com.bsu.taichi.content.entity.dbo.Images;
+import com.bsu.taichi.content.entity.dbo.ModelParameters;
 import com.bsu.taichi.content.entity.dbo.Models;
 import com.bsu.taichi.content.entity.vo.CarouselImage;
 import com.bsu.taichi.content.entity.vo.CategorieImage;
+import com.bsu.taichi.content.entity.vo.ModelInfo;
 import com.bsu.taichi.content.entity.vo.UploadFileRequest;
 import com.bsu.taichi.content.service.MediaFilesService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +47,18 @@ public class MediaFilesController {
                                                          @RequestParam(value = "modelName", required = false) String modelName,
                                                          @RequestParam(value = "modelIndex", required = false) Integer modelIndex,
                                                          @RequestParam(value = "fileType", required = false) Integer fileType,
-                                                         @RequestParam(value = "description", required = false) String description) {
+                                                         @RequestParam(value = "description", required = false) String description,
+                                                         @RequestParam(value = "positionX", required = false) Float positionX,
+                                                         @RequestParam(value = "positionY", required = false) Float positionY,
+                                                         @RequestParam(value = "positionZ", required = false) Float positionZ,
+                                                         @RequestParam(value = "rotationX", required = false) Float rotationX,
+                                                         @RequestParam(value = "rotationY", required = false) Float rotationY,
+                                                         @RequestParam(value = "rotationZ", required = false) Float rotationZ,
+                                                         @RequestParam(value = "rotationW", required = false) Float rotationW,
+                                                         @RequestParam(value = "scaleX", required = false) Float scaleX,
+                                                         @RequestParam(value = "scaleY", required = false) Float scaleY,
+                                                         @RequestParam(value = "scaleZ", required = false) Float scaleZ
+                                                         ){
 
         UploadFileRequest request = new UploadFileRequest();
         request.setFile(file);
@@ -54,6 +67,20 @@ public class MediaFilesController {
         request.setModelIndex(modelIndex);
         request.setFileType(fileType);
         request.setDescription(description);
+        if(fileType == 0){
+            ModelParameters modelParameters = new ModelParameters();
+            modelParameters.setPositionX(positionX != null ? positionX.doubleValue() : null);
+            modelParameters.setPositionY(positionY != null ? positionY.doubleValue() : null);
+            modelParameters.setPositionZ(positionZ != null ? positionZ.doubleValue() : null);
+            modelParameters.setRotationX(rotationX != null ? rotationX.doubleValue() : null);
+            modelParameters.setRotationY(rotationY != null ? rotationY.doubleValue() : null);
+            modelParameters.setRotationZ(rotationZ != null ? rotationZ.doubleValue() : null);
+            modelParameters.setRotationW(rotationW != null ? rotationW.doubleValue() : null);
+            modelParameters.setScaleX(scaleX != null ? scaleX.doubleValue() : 1);
+            modelParameters.setScaleY(scaleY != null ? scaleY.doubleValue() : 1);
+            modelParameters.setScaleZ(scaleZ != null ? scaleZ.doubleValue() : 1);
+            request.setModelParameters(modelParameters);
+        }
 
         return RestResponse.success(mediaFilesService.uploadFile(request));
     }
@@ -95,11 +122,11 @@ public class MediaFilesController {
      *  获取展厅中的 图像和模型数据
      * @return
      */
-    @PostMapping("exhibition/data")
-    public RestResponse getExhibitionData() {
-        // TODO
-
-        return null;
+    @GetMapping("exhibition/data")
+    public RestResponse<List<ModelInfo>> getExhibitionData(@RequestParam("itemId") Integer projectId) {
+        // Your logic here
+        List<ModelInfo> modelInfos = mediaFilesService.getExhibitionData(projectId);
+        return RestResponse.success(modelInfos);
     }
 
 

@@ -47,8 +47,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Images" />
-                  <option name="tableName" value="images" />
+                  <option name="className" value="ModelParameters" />
+                  <option name="tableName" value="model_parameters" />
                 </TableUIInfo>
               </list>
             </option>

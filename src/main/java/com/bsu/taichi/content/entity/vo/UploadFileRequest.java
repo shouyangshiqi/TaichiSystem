@@ -1,5 +1,6 @@
 package com.bsu.taichi.content.entity.vo;
 
+import com.bsu.taichi.content.entity.dbo.ModelParameters;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -32,5 +33,8 @@ public class UploadFileRequest {
 
     @ApiModelProperty("文件类型：0: 模型， 1： 图片")
     private Integer fileType;
+
+    @ApiModelProperty("模型位置信息")
+    private ModelParameters modelParameters;
 
 }

@@ -2,17 +2,21 @@ package com.bsu.taichi.content.service;
 
 import com.bsu.taichi.base.execption.TaichiException;
 import com.bsu.taichi.content.entity.dao.ImagesDao;
+import com.bsu.taichi.content.entity.dao.ModelParametersDao;
 import com.bsu.taichi.content.entity.dao.ModelsDao;
 import com.bsu.taichi.content.entity.dao.ProjectsDao;
 import com.bsu.taichi.content.entity.dbo.Images;
+import com.bsu.taichi.content.entity.dbo.ModelParameters;
 import com.bsu.taichi.content.entity.dbo.Models;
 import com.bsu.taichi.content.entity.dbo.Projects;
 import com.bsu.taichi.content.entity.vo.CarouselImage;
 import com.bsu.taichi.content.entity.vo.CategorieImage;
+import com.bsu.taichi.content.entity.vo.ModelInfo;
 import com.bsu.taichi.content.entity.vo.UploadFileRequest;
 import com.bsu.taichi.content.util.MinioUtils;
 import io.minio.ObjectWriteResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author khran
@@ -32,6 +37,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class MediaFilesService {
+
+    @Autowired
+    private ModelParametersDao modelParametersDao;
 
     @Autowired
     private ModelsDao modelsDao;
@@ -62,7 +70,7 @@ public class MediaFilesService {
             String objectName = null;
             if(uploadFileRequest.getFileType() == 0){
                 // 模型文件
-                objectName = uploadFileRequest.getProjectName() + "/models/" + fileName;
+                objectName = uploadFileRequest.getProjectName() + "/models/" + uploadFileRequest.getModelName() + ".ply";
             }else {
                 // 图片文件
                 objectName = uploadFileRequest.getProjectName() + "/images/"+ uploadFileRequest.getModelName() + "/" + fileName;
@@ -99,6 +107,11 @@ public class MediaFilesService {
                 models.setCreateTime(now);
                 modelsDao.insertOrUpdate(models);
 
+                // 将位置参数保存进数据表model_parameters
+                ModelParameters modelParameters = uploadFileRequest.getModelParameters();
+                modelParameters.setModelId(models.getModelId());
+                modelParametersDao.insert(modelParameters);
+
             } else {
                 // 图片文件
                 Models models = modelsDao.selectByProjectAndModelIndex(project.getProjectId(), uploadFileRequest.getModelIndex());
@@ -109,7 +122,7 @@ public class MediaFilesService {
                 images.setModelId(models.getModelId());
                 images.setImageName(fileName);
                 images.setImageDescription(uploadFileRequest.getDescription());
-                images.setImageType(0);
+                images.setImageType(1);
                 images.setImageObjectKey(filePath);
                 images.setImageSize(file.getSize());
                 images.setCreateTime(now);
@@ -187,5 +200,30 @@ public class MediaFilesService {
 
         return result;
 
+    }
+
+    public List<ModelInfo> getExhibitionData(Integer projectId) {
+        List<Models> models = modelsDao.selectByProjectId(projectId);
+        // 根据model id 获取对应的model_parameters
+        List<Integer> modelIds = models.stream().map(Models::getModelId).collect(Collectors.toList());
+        List<ModelParameters> modelParameters = modelParametersDao.selectBatchIds(modelIds);
+        HashMap<Integer, ModelParameters> map = new HashMap<>();
+        for (ModelParameters parameter : modelParameters) {
+            map.put(parameter.getModelId(), parameter);
+        }
+
+        // 组装对象返回数据
+        ArrayList<ModelInfo> modelInfos = new ArrayList<>();
+        for (Models model : models) {
+            ModelInfo modelInfo = new ModelInfo();
+            BeanUtils.copyProperties(model, modelInfo);
+            ModelParameters orDefault = map.getOrDefault(model.getModelId(), null);
+            if(orDefault != null){
+                BeanUtils.copyProperties(orDefault, modelInfo);
+                modelInfos.add(modelInfo);
+            }
+        }
+        // 返回数据
+        return modelInfos;
     }
 }

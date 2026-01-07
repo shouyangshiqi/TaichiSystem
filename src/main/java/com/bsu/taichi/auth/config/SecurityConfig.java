@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 // 允许通过( 不经过验证 ）
-                .antMatchers("/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
-                    // 这里替换为你的前端登录页面URL
+                    // 前端登录页面URL
                     String loginPageUrl = "http://localhost:8080/login";
                     // 重定向到前端登录页
                     response.sendRedirect(loginPageUrl);

@@ -28,6 +28,7 @@ public class ImagesDao {
     public List<Images> selectByModelId(int id) {
         LambdaQueryWrapper<Images> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Images::getModelId, id);
+        wrapper.eq(Images::getImageType, 1);
         return imagesMapper.selectList(wrapper);
     }
 

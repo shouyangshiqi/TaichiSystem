@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsu.taichi.mapper.ModelParametersMapper">
+
+    <resultMap id="BaseResultMap" type="com.bsu.taichi.content.entity.dbo.ModelParameters">
+            <id property="id" column="id" />
+            <result property="modelId" column="model_id" />
+            <result property="positionX" column="position_x" />
+            <result property="positionY" column="position_y" />
+            <result property="positionZ" column="position_z" />
+            <result property="rotationX" column="rotation_x" />
+            <result property="rotationY" column="rotation_y" />
+            <result property="rotationZ" column="rotation_z" />
+            <result property="rotationW" column="rotation_w" />
+            <result property="scaleX" column="scale_x" />
+            <result property="scaleY" column="scale_y" />
+            <result property="scaleZ" column="scale_z" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,model_id,position_x,position_y,position_z,rotation_x,
+        rotation_y,rotation_z,rotation_w,scale_x,scale_y,
+        scale_z,created_at
+    </sql>
+</mapper>
