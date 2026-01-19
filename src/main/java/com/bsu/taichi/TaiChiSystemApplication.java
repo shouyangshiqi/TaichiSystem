@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 
 @SpringBootApplication
-@MapperScan("com.bsu.taichi.mapper")
+
 public class TaiChiSystemApplication {
     public static void main(String[] args) {
         org.springframework.boot.SpringApplication.run(TaiChiSystemApplication.class, args);
